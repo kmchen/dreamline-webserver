@@ -3,6 +3,8 @@ var Review  = require('./models/reviews');
 
 var Router = express.Router();
 
+// TODO : Add moddlewares
+
 // api/all/stats returns a collection of all airports stats ordered by review count
 // each item in the collection should have:
 // - Airport name
