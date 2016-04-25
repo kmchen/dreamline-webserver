@@ -17,7 +17,7 @@ RUN mkdir -p /data/db
 RUN wget https://raw.githubusercontent.com/quankiquanki/skytrax-reviews-dataset/master/data/airport.csv
 
 # Download airport review data import script
-RUN wget https://raw.githubusercontent.com/kmchen/airpot/master/vendor/dataImport.sh
+RUN wget https://raw.githubusercontent.com/kmchen/dreamline-webserver/master/vendor/dataImport.sh
 
 RUN chmod 777 dataImport.sh
 
