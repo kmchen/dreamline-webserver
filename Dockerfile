@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y git nano
 
 # Pull code from github and run npm install
 RUN git clone https://github.com/kmchen/dreamline-webserver.git && \
-    cd /airpot && \
+    cd /dreamline-webserver && \
     npm install
 
 EXPOSE 8080
