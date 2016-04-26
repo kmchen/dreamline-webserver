@@ -1,5 +1,5 @@
 
-var host = process.env['HOST'];
+var host = process.env['HOST'] || 'localhost';
 
 module.exports =  {
   port: process.env.port || 8080,
