@@ -53,7 +53,7 @@ GET /api/all/stats
 
 Returns a collection of all airports  stats ordered by the count of reviews
 
-Test : curl http://<IP>:8080/api/all/stats | python -m json.tool
+Test : curl http://HOST:8080/api/all/stats | python -m json.tool
 ```
 [
   {
@@ -73,7 +73,7 @@ GET /api/:airpot/stats
 
 Returns some stats for a specifig airport
 
-Test : curl http://<IP>:8080/api/aberdeen-airport/stats | python -m json.tool
+Test : curl http://HOST:8080/api/aberdeen-airport/stats | python -m json.tool
 ```
 {
     "airport_name": "aberdeen-airport",
@@ -86,7 +86,7 @@ GET /api/:airpot/review
 
 returns a collection of reviews ordered by date as the latest review remains as first element
 
-Test : curl http://<IP>:8080/api/aberdeen-airport/reviews | python -m json.tool
+Test : curl http://HOST:8080/api/aberdeen-airport/reviews | python -m json.tool
 ```
 [
     {
@@ -118,23 +118,18 @@ Test : curl http://<IP>:8080/api/aberdeen-airport/reviews | python -m json.tool
 
 ## Optional ##
 
-The CSV-file  just  represents  the current state;  we  want  to  be  able  to  update  the data  
-in  the system  with  a new version of  the CSV-file, implement a way to  update  the data  
+The CSV-file just represents the current state. we want to be able to update the data in the system with a new version of the CSV-file. Implement a way to update the data  
 source.   
 * 
 
-Right now we  are using this  CSV-file  as  our data  source  for the API but this  may 
-change  in  the future. We  want  to be able  to  easily  switch  away  from  the static  CSVfile
-to  use a different persistence’s source  like  a queue system. 
-Write 3-5 sentences about how a migration to  a queue system  could look  like  and 
-what  parts of  the systems have  to  be  changed.
+Right now we  are using this  CSV-file  as  our data  source  for the API but this  may change  in  the future. We  want  to be able  to  easily  switch  away  from  the static  CSVfile to  use a different persistence’s source  like  a queue system.  Write 3-5 sentences about how a migration to  a queue system  could look  like  and what  parts of  the systems have  to  be  changed.
+*
 
+We want to be able to display only reviews that are in a given ‘overall_rating’-ratio. For example, we only want the API to return reviews that are 2.0 or above.
+*
 
-We  want to be  able  to  display only reviews  that  are in  a given ‘overall_rating’-ratio. 
-For example,  we  only  want  the API to  return  reviews that  are 2.0 or  above.
+Provide a small user documentation for the API endpoints you implemented.  
+*
 
-
-Provide a small user  documentation for the API endpoints you implemented.  
-
-
-Provide unit  tests where you think it  makes sense.
+Provide unit tests where you think it  makes sense.
+* 
