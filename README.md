@@ -33,7 +33,7 @@ $ docker build --tag docker/repo .
 or pull image from docker hub
 
 ```sh
-$ > docker pull kmchen/web-server
+$ docker pull kmchen/web-server
 ```
 #### Running web server ####
 
@@ -74,21 +74,33 @@ returns a collection of reviews ordered by date as the latest review remains as 
 }
 ```
 
+## TODO ##
+
+* Add unit test and regression test
+* Add a cache service and queueing system
+* Add route middleware to validate incoming request
+* Handle error checking
+* Answer optional questions
+
 ## Optional ##
 
-> The CSV-file  just  represents  the current state;  we  want  to  be  able  to  update  the data  
+The CSV-file  just  represents  the current state;  we  want  to  be  able  to  update  the data  
 in  the system  with  a new version of  the CSV-file, implement a way to  update  the data  
 source.   
+* 
 
-> Right now we  are using this  CSV-file  as  our data  source  for the API but this  may 
+Right now we  are using this  CSV-file  as  our data  source  for the API but this  may 
 change  in  the future. We  want  to be able  to  easily  switch  away  from  the static  CSVfile
 to  use a different persistence’s source  like  a queue system. 
 Write 3-5 sentences about how a migration to  a queue system  could look  like  and 
 what  parts of  the systems have  to  be  changed.
 
-> We  want to be  able  to  display only reviews  that  are in  a given ‘overall_rating’-ratio. 
+
+We  want to be  able  to  display only reviews  that  are in  a given ‘overall_rating’-ratio. 
 For example,  we  only  want  the API to  return  reviews that  are 2.0 or  above.
 
-> Provide a small user  documentation for the API endpoints you implemented.  
 
-> Provide unit  tests where you think it  makes sense.
+Provide a small user  documentation for the API endpoints you implemented.  
+
+
+Provide unit  tests where you think it  makes sense.
