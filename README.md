@@ -45,21 +45,33 @@ $ docker run -p 8080:8080 -e HOST=<IP> -d docker/repo
 GET /api/all/stats
 
 Returns a collection of all airports  stats ordered by the count of reviews
+
+Test : curl http://<IP>:8080/api/all/stats | python -m json.tool
 ```
-{
-    "rest_api_key": "9bf2154e-abc2-4606-96b9-8c20a01f77eb", 
-    "client_id": "1096210940045-lqb5rcvtesn96h8dij9ei62e7ha8dcu6.apps.googleusercontent.com"
-}
+[
+  {
+    "airport_name": "london-heathrow-airport", 
+    "review_count": 520
+  },
+  { 
+    "airport_name": "london-stansted-airport",
+    "review_count": 402
+  },
+  ...
+  ...
+]
 ```
 
 GET /api/:airpot/stats
 
 Returns some stats for a specifig airport
 
+Test : curl http://<IP>:8080/api/aberdeen-airport/stats | python -m json.tool
 ```
 {
-    "rest_api_key": "9bf2154e-abc2-4606-96b9-8c20a01f77eb", 
-    "client_id": "1096210940045-lqb5rcvtesn96h8dij9ei62e7ha8dcu6.apps.googleusercontent.com"
+    "airport_name": "aberdeen-airport",
+    "avg_overall_rating": "3.18",
+    "recommended_count": 3,                                                                                                                                                       "review_count": 43                                                                                                                                                    }
 }
 ```
 
@@ -67,11 +79,26 @@ GET /api/:airpot/review
 
 returns a collection of reviews ordered by date as the latest review remains as first element
 
+Test : curl http://<IP>:8080/api/aberdeen-airport/reviews | python -m json.tool
 ```
-{
-    "rest_api_key": "9bf2154e-abc2-4606-96b9-8c20a01f77eb", 
-    "client_id": "1096210940045-lqb5rcvtesn96h8dij9ei62e7ha8dcu6.apps.googleusercontent.com"
-}
+[
+    {
+        "author_country": "United Kingdom",
+        "content": "This airport gets worse  ... ",
+        "date": "2015-07-21",
+        "overall_rating": 2,
+        "recommended": 0
+    },
+    {
+        "author_country": "Romania",
+        "content": "Small airport, .... ",
+        "date": "2015-06-24",
+        "overall_rating": 8,
+        "recommended": 1
+    },
+    ...
+    ...
+]
 ```
 
 ## TODO ##
