@@ -33,7 +33,7 @@ $ docker build --tag docker/repo .
 or pull image from docker hub
 
 ```sh
-$ docker pull kmchen/web-server
+$ docker pull kmchen/webserver
 ```
 #### Running web server ####
 
