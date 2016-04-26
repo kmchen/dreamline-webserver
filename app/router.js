@@ -3,7 +3,7 @@ var Review  = require('./models/reviews');
 
 var Router = express.Router();
 
-// TODO : Add moddlewares
+// TODO : Add moddlewares to validate request params
 
 // api/all/stats returns a collection of all airports stats ordered by review count
 // each item in the collection should have:
@@ -13,6 +13,7 @@ Router.route('/all/stats')
   .get(function(req, res) {
     Review.aggregate([
       {$group: {_id: "$airport_name", review_count: {$sum: 1}}},
+      {$sort: {review_count: -1}},
       {$project : { _id : 0 , airport_name: "$_id" , review_count : 1 }}],
       function(err, result) {
         if (err)
@@ -33,13 +34,13 @@ Router.route('/:airport/stats')
       {$match: {  airport_name: req.params.airport}},
       {$group: {  _id: "$airport_name",
                   avg_overall_rating: { $avg: '$overall_rating' },
-                  recommended_cnt: {$sum: { $cmp: [ "$recommended", 0 ]}},
-                  review_cnt: {$sum: 1}}},
+                  recommended_count: {$sum: { $cmp: [ "$recommended", 0 ]}},
+                  review_count: {$sum: 1}}},
       {$project : { _id : 0 ,
                     airport_name: "$_id",
                     avg_overall_rating: 1,
-                    recommended_cnt: 1,
-                    review_cnt : 1 }}],
+                    recommended_count: 1,
+                    review_count : 1 }}],
       function(err, results) {
         if (err)
           console.error('Fail to query /api/'+ req.params.airpot+'/stats', err);
