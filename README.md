@@ -41,6 +41,7 @@ $ docker pull kmchen/web-server
 $ docker run -p 8080:8080 -e HOST=<IP> -d docker/repo
 ```
 or run as below :
+
 Note : The server connects to MongoDB "localhost:27017" unless specified in env varialble "HOST"
 ```sh
 $ npm start
