@@ -1,9 +1,23 @@
 var express = require('express');
 var Review  = require('./models/reviews');
+var Constant = require('./constant');
 
 var Router = express.Router();
 
-// TODO : Add moddlewares to validate request params
+// logger is a req loging middleware
+function logger(req, res, next) {
+  var today = new Date().toLocaleDateString('en-GB', {
+          year  : 'numeric',
+          month : 'numeric',
+          day   : 'numeric',
+          hour  : '2-digit',
+          minute: '2-digit',
+  }).split(', ').join(' ');
+  console.log(today, req.method, req.originalUrl);
+  next();
+};
+
+Router.use(logger);
 
 // api/all/stats returns a collection of all airports stats ordered by review count
 // each item in the collection should have:
@@ -16,9 +30,12 @@ Router.route('/all/stats')
       {$sort: {review_count: -1}},
       {$project : { _id : 0 , airport_name: "$_id" , review_count : 1 }}],
       function(err, result) {
-        if (err)
-          console.error('Fail to query /api/all/stats', err)
-        res.json(result)
+        if (err) {
+          console.error('[Err] Fail to query /api/all/stats', err)
+          res.status(Constant.StatusBadRequest).json([]);
+          return;
+        }
+        res.json(result);
       }
     );
   });
@@ -42,10 +59,23 @@ Router.route('/:airport/stats')
                     recommended_count: 1,
                     review_count : 1 }}],
       function(err, results) {
-        if (err)
-          console.error('Fail to query /api/'+ req.params.airpot+'/stats', err);
-        var r = results[0]
-        r.avg_overall_rating = r.avg_overall_rating.toFixed(2)
+        if (err) {
+          console.error('[Err] Fail to query /api/'+ req.params.airport+'/stats', err);
+          res.status(Constant.StatusBadRequest).json({});
+          return;
+        }
+        if (results.length > 1) {
+          console.log('[Err] More than one result found /api/'+ req.params.airport+'/stats', result);
+          res.status(Constant.StatusInternalServerError).json({});
+          return;
+        }
+        if (results.length == 0) {
+          console.log('[Info] Query not found /api/'+ req.params.airport+'/stats');
+          res.json({});
+          return;
+        }
+        var r = results[0];
+        r.avg_overall_rating = r.avg_overall_rating.toFixed(2);
         res.json(r);
       }
     );
@@ -71,8 +101,11 @@ Router.route('/:airport/reviews')
                     recommended: 1,
                     overall_rating: 1}}],
       function(err, result) {
-        if (err)
-          console.error('Fail to query /api/'+ req.params.airpot+'/reviews', err);
+        if (err) {
+          console.error('[Err] Fail to query /api/'+ req.params.airport+'/reviews', err);
+          res.json([]);
+          return;
+        }
         res.json(result);
       }
     );
