@@ -6,12 +6,13 @@ import Constant from '../app/constant';
 import Meta     from '../app/store/meta';
 
 describe('Set and Get meta store', () => {
-  before(() => {
+  before((done) => {
     let mongoURL = "mongodb://localhost/test";
     mongoose.connect(mongoURL);
     let db = mongoose.connection;
     db.once('open', function() {
       console.log('Successfully connected to MongoDB on port');
+      done();
     });
     db.on('error',() => {
       assert.fail('Unable to connect to '+mongoURL);
@@ -22,14 +23,43 @@ describe('Set and Get meta store', () => {
     mongoose.disconnect();
   });
 
-  it('Set then get', () => {
-    let someUUID = uuid.v1();
-    let someType = uuid.v1();
-    let m = new Meta({uuid: someUUID}, someType);
-    return m.set().then((doc) => {
+  let someUUID = uuid.v1();
+  let someType = uuid.v1();
+  let m = new Meta({uuid: someUUID}, someType);
+  let saved = {};
+
+  it('Set', () => {
+    return m.Set().then(doc => {
       expect(doc).be.exist;
       expect(someUUID).to.equal(doc.data.uuid);
       expect(someType).to.equal(doc.type);
-    })}
-  );
+      saved = doc;
+    }).end();
+  });
+
+  it('Get', () => {
+    return m.Get(saved.guid).then(doc => {
+      expect(doc).be.exist;
+      expect(doc).to.have.length(1);
+      let data = doc[0];
+      expect(data.guid).to.equal(saved.guid);
+      expect(data.type).to.equal(saved.type);
+      expect(data.data).to.have.property('uuid').to.be.equal(someUUID);
+      expect(data.invType).to.equal(saved.invType);
+    }).end();
+  });
+
+  it('Update', () => {
+    saved.invType = 'hello';
+    m.Update(saved);
+    return m.Get(saved.guid).then(doc => {
+      expect(doc).be.exist;
+      expect(doc).to.have.length(1);
+      let data = doc[0];
+      expect(data.guid).to.equal(saved.guid);
+      expect(data.type).to.equal(saved.type);
+      expect(data.data).to.have.property('uuid').to.be.equal(someUUID);
+      expect(data.invType).to.equal('hello');
+    }).end();
+  });
 });

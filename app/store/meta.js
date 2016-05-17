@@ -4,32 +4,40 @@ const Schema = mongoose.Schema;
 
 import {MetaModel, MetaSchema} from '../models/metaSchema';
 
-function Meta(data = {}, type = "", invType = ""){
-  this.metaData = new MetaModel({
-    guid: uuid.v1(),
-    data: data,
-    type: type,
-    invType: invType
-  });
-}
-
-// Get
-Meta.prototype.get = (guid, cb) => {
-  if (guid) {
-    console.error('Missing GUId');
-    return;
+class Meta {
+  constructor(data = {}, type = "", invType = "") {
+    this.metaData = new MetaModel({
+      guid: uuid.v1(),
+      data: data,
+      type: type,
+      invType: invType
+    });
   }
-  return MetaModel.find({guid:guid}).exec(cb);
+  // Get a meta object given a guid
+  Get(guid, cb) {
+    if (!guid) {
+      return new Error('[Meta] Missing GUId');
+    }
+    return MetaModel.find({guid: guid}).exec(cb);
+  }
+
+  // Set a meta object
+  Set(cb) {
+    return this.metaData.save(cb);
+  }
+  
+  //Update
+  Update(obj, cb) {
+    if (!obj.guid) {
+      return new Error('[Meta] Missing GUID while updating meta object' + obj) 
+    }
+    return MetaModel.findOneAndUpdate({guid: obj.guid}, obj, null, null).exec(cb);
+  }
 }
 
-// Set
-Meta.prototype.set = function(cb){
-  return this.metaData.save(cb);
-}
 
+// Delete
+//Meta.prototype.delete = (cb) => {
+  //return this.metaData.save(cb);
+//}
 export default Meta;
-// Invalidate
-//import mongoose from 'mongoose';
-//var child = new Schema({ name: String });
-//var schema = new Schema({ name: String, age: Number, children: [child] });
-//var Tree = mongoose.model('SomeTree', schema);
