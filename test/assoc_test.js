@@ -29,6 +29,7 @@ describe('Asso store operation', () => {
   let guidDest = uuid.v1();
   let assoc = new Assoc(guidDest, someType, {uuid: someUUID});
   let a = assoc.new(guidDest, someType, {uuid: someUUID});
+  let query = {guid: a.guid, type: a.type, guidDest: a.guidDest};
   let saved = {};
 
   it('Set', () => {
@@ -41,7 +42,7 @@ describe('Asso store operation', () => {
   });
 
   it('Get', () => {
-    return assoc.Get(saved.guid).then(doc => {
+    return assoc.Get(query).then(doc => {
       expect(doc).be.exist;
       expect(doc).to.have.length(1);
       let data = doc[0];
@@ -55,8 +56,9 @@ describe('Asso store operation', () => {
 
   it('Update', () => {
     saved.timestamp = moment.valueOf();
+    //let query = {guid: saved.guid, type: saved.type, guidDest: saved.guidDest};
     assoc.Update(saved);
-    return assoc.Get(saved.guid).then(doc => {
+    return assoc.Get(query).then(doc => {
       expect(doc).be.exist;
       expect(doc).to.have.length(1);
       let data = doc[0];
@@ -68,10 +70,10 @@ describe('Asso store operation', () => {
   });
 
   it('Delete', () => {
-    assoc.Delete(saved.guid);
-    return assoc.Get(saved.guid).then(doc => {
+    //let query = {guid: saved.guid, type: saved.type, guidDest: saved.guidDest};
+    assoc.Delete(query);
+    return assoc.Get(query).then(doc => {
       expect(doc).to.have.length(0);
     }).end();
   });
 });
-
