@@ -50,7 +50,7 @@ describe('Set and Get meta store', () => {
   });
 
   it('Update', () => {
-    saved.invType = 'hello';
+    saved.invType = uuid.v1();;
     m.Update(saved);
     return m.Get(saved.guid).then(doc => {
       expect(doc).be.exist;
@@ -59,7 +59,7 @@ describe('Set and Get meta store', () => {
       expect(data.guid).to.equal(saved.guid);
       expect(data.type).to.equal(saved.type);
       expect(data.data).to.have.property('uuid').to.be.equal(someUUID);
-      expect(data.invType).to.equal('hello');
+      expect(data.invType).to.equal(saved.invType);
     }).end();
   });
 });
