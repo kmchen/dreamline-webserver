@@ -25,11 +25,12 @@ describe('Set and Get meta store', () => {
 
   let someUUID = uuid.v1();
   let someType = uuid.v1();
-  let m = new Meta({uuid: someUUID}, someType);
+  let meta = new Meta();
+  let m = meta.new({uuid: someUUID}, someType);
   let saved = {};
 
   it('Set', () => {
-    return m.Set().then(doc => {
+    return meta.Set(m).then(doc => {
       expect(doc).be.exist;
       expect(someUUID).to.equal(doc.data.uuid);
       expect(someType).to.equal(doc.type);
@@ -38,7 +39,7 @@ describe('Set and Get meta store', () => {
   });
 
   it('Get', () => {
-    return m.Get(saved.guid).then(doc => {
+    return meta.Get(saved.guid).then(doc => {
       expect(doc).be.exist;
       expect(doc).to.have.length(1);
       let data = doc[0];
@@ -51,8 +52,8 @@ describe('Set and Get meta store', () => {
 
   it('Update', () => {
     saved.invType = uuid.v1();
-    m.Update(saved);
-    return m.Get(saved.guid).then(doc => {
+    meta.Update(saved);
+    return meta.Get(saved.guid).then(doc => {
       expect(doc).be.exist;
       expect(doc).to.have.length(1);
       let data = doc[0];
@@ -64,8 +65,8 @@ describe('Set and Get meta store', () => {
   });
 
   it('Delete', () => {
-    m.Delete(saved.guid);
-    return m.Get(saved.guid).then(doc => {
+    meta.Delete(saved.guid);
+    return meta.Get(saved.guid).then(doc => {
       expect(doc).to.have.length(0);
     }).end();
   });

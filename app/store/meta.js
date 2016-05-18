@@ -1,12 +1,11 @@
 import uuid  from 'uuid';
 import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
 
 import {MetaModel, MetaSchema} from '../models/metaSchema';
 
 class Meta {
-  constructor(data = {}, type = "", invType = "") {
-    this.metaData = new MetaModel({
+  new(data = {}, type = "", invType = "") {
+    return new MetaModel({
       guid: uuid.v1(),
       data: data,
       type: type,
@@ -21,8 +20,11 @@ class Meta {
     return MetaModel.find({guid: guid}).exec(cb);
   }
   // Set a meta object
-  Set(cb) {
-    return this.metaData.save(cb);
+  Set(metaObj, cb) {
+    if (!metaObj) {
+      return new Error('[Meta] Missing obj to set meta object' + metaObj), null 
+    }
+    return metaObj.save(cb);
   }
   //Update
   Update(obj, cb) {
