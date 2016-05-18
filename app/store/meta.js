@@ -20,12 +20,10 @@ class Meta {
     }
     return MetaModel.find({guid: guid}).exec(cb);
   }
-
   // Set a meta object
   Set(cb) {
     return this.metaData.save(cb);
   }
-  
   //Update
   Update(obj, cb) {
     if (!obj.guid) {
@@ -33,11 +31,13 @@ class Meta {
     }
     return MetaModel.findOneAndUpdate({guid: obj.guid}, obj, null, null).exec(cb);
   }
+  // Delete
+  Delete(guid) {
+    if (!guid) {
+      return new Error('[Meta] Missing GUID to remove meta object' + obj) 
+    }
+    return MetaModel.findOneAndRemove({guid: guid}).exec();
+  }
 }
 
-
-// Delete
-//Meta.prototype.delete = (cb) => {
-  //return this.metaData.save(cb);
-//}
 export default Meta;
