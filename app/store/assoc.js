@@ -5,8 +5,6 @@ import _        from 'lodash';
 
 import {AssocModel, AssocSchema} from '../models/assocSchema';
 
-const emptyVal = '0';
-
 class Assoc {
   new(dest, type, data = {}) {
     return new AssocModel({

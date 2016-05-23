@@ -2,8 +2,11 @@ var express = require('express');
 var Review  = require('./models/reviews');
 var Constant = require('./constant');
 
-var Router = express.Router();
+import {GetAuthURL} from './util/Oauth';
 
+var Router = express.Router();
+const cst = Constant;
+//
 // logger is a req loging middleware
 function logger(req, res, next) {
   var today = new Date().toLocaleDateString('en-GB', {
@@ -32,7 +35,7 @@ Router.route('/all/stats')
       function(err, result) {
         if (err) {
           console.error('[Err] Fail to query /api/all/stats', err)
-          res.status(Constant.StatusBadRequest).json([]);
+          res.status(cst.StatusBadRequest).json([]);
           return;
         }
         res.json(result);
@@ -66,7 +69,7 @@ Router.route('/:airport/stats')
         }
         if (results.length > 1) {
           console.log('[Err] More than one result found /api/'+ req.params.airport+'/stats', result);
-          res.status(Constant.StatusInternalServerError).json({});
+          res.status(cst.InternalServerError).json({});
           return;
         }
         if (results.length == 0) {
@@ -111,4 +114,19 @@ Router.route('/:airport/reviews')
     );
   });
 
+// Send out for authorization login
+Router.route('/login')
+  .get(function(req, res) {
+    let authURL = GetAuthURL();
+    console.log('/login', authURL);
+    if (!authURL)
+      res.status(cst.BadRequest).send('[Oauth] Invalid auth URL').end();
+    res.json(authURL)
+ });
+
+// /api/callback?code=4/OjHR7HidPqE9c4Lk0y-2rHUuFQz_9PtiQjVO0YOMxc4
+Router.route('/callback')
+  .get(function(req, res) {
+    console.log(req);
+  });
 module.exports = Router;
