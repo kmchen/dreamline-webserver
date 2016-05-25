@@ -1,12 +1,14 @@
-var express = require('express');
-var Review  = require('./models/reviews');
-var Constant = require('./constant');
+import express from 'express';
+import Review  from './models/reviews';
+import Constant from './constant';
+import Superagent from 'SuperAgent';
 
-import {GetAuthURL} from './util/Oauth';
+import {GetToken, GetAuthURL} from './util/Oauth';
 
-var Router = express.Router();
 const cst = Constant;
-//
+const Router = express.Router();
+const sa = Superagent;
+
 // logger is a req loging middleware
 function logger(req, res, next) {
   var today = new Date().toLocaleDateString('en-GB', {
@@ -118,15 +120,25 @@ Router.route('/:airport/reviews')
 Router.route('/login')
   .get(function(req, res) {
     let authURL = GetAuthURL();
-    console.log('/login', authURL);
     if (!authURL)
       res.status(cst.BadRequest).send('[Oauth] Invalid auth URL').end();
     res.json(authURL)
  });
 
-// /api/callback?code=4/OjHR7HidPqE9c4Lk0y-2rHUuFQz_9PtiQjVO0YOMxc4
+const meta = new Meta();
+// /api/callback?code=4/OjHR
 Router.route('/callback')
   .get(function(req, res) {
-    console.log(req);
-  });
+    let code = req.query.code;
+    let saveToken = (err, user) => {
+      if(!err) {
+        let m = meta.new({uuid: someUUID}, someType);
+      }
+    }
+    if (code) {
+      GetToken(code);
+    }
+    return;
+ });
+
 module.exports = Router;
